@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SITG Search Estate</title>
+    <title>SITG Knowledge Platform</title>
     <link rel="stylesheet" href="search-overlay.css">
     <style>
-        /* Force everything to lock down to zero height until active */
         html, body {
-            background: transparent !important;
+            background: #0B0F19 !important;
             margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-            height: 34px !important; /* Forces the entire web page to stay perfectly short */
+            padding: 12px !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow-x: hidden !important;
         }
 
+        /* Displays natively as a flat, interactive widget panel on your page */
         #sitg-search-modal {
             display: block !important;
-            position: absolute !important;
+            position: relative !important;
             background: transparent !important;
-            padding: 0 !important;
-            margin: 0 !important;
             width: 100% !important;
-            height: 34px !important;
+            height: auto !important;
         }
 
         .sitg-search-container {
@@ -33,39 +31,28 @@
             box-shadow: none !important;
         }
 
-        .sitg-search-header-box {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        /* Tiny, flat, neat input bar style */
         .sitg-search-input-element {
-            padding: 6px 12px !important;
-            font-size: 13px !important;
-            height: 34px !important;
+            padding: 10px 14px !important;
+            font-size: 14px !important;
+            height: 40px !important;
             box-sizing: border-box;
-            border-radius: 4px !important;
+            border-radius: 6px !important;
             background: #141B2D !important;
             color: #F9FAFB !important;
             border: 1px solid #1E293B !important;
             width: 100% !important;
+            margin-bottom: 16px !important;
         }
 
         #sitg-search-close-trigger {
             display: none !important;
         }
 
-        /* The results panel pops OVER your website elements, not inside the page layout flow */
+        /* Results print sequentially directly inside the frame canvas */
         #sitg-recommendations-target,
         #sitg-results-target {
-            position: fixed !important;
-            top: 40px;
-            left: 0;
-            width: 100%;
-            z-index: 999999 !important;
-            max-height: 350px;
-            overflow-y: auto;
-            box-sizing: border-box;
+            margin-top: 10px !important;
+            width: 100% !important;
         }
     </style>
 </head>
@@ -74,7 +61,7 @@
     <div id="sitg-search-modal">
         <div class="sitg-search-container">
             <div class="sitg-search-header-box">
-                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Search..." autocomplete="off">
+                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Type to explore services, references, & whitepapers..." autocomplete="off">
             </div>
             <div id="sitg-recommendations-target"></div>
             <div id="sitg-results-target"></div>
@@ -101,46 +88,43 @@
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
 
-                if (!query.trim()) {
-                    // Shrink page rules completely back to standard flat dimensions if input is empty
-                    document.documentElement.style.height = "34px";
-                    document.body.style.height = "34px";
-                    return;
-                }
+                if (!query.trim()) return;
 
-                // Dynamically allow the layout container to grow downwards only while user is typing
-                document.documentElement.style.height = "auto";
-                document.body.style.height = "auto";
-
+                // 1. Render core services & priority paths first
                 if (output.recommendations) {
                     const r = output.recommendations;
                     recTarget.innerHTML = `
-                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:12px; border-radius:4px; color:#fff; margin-bottom:8px; font-family:sans-serif; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
-                            <div style="color:#3B82F6; font-weight:bold; margin-bottom:6px; font-size:13px;">🎯 SITG Alignment</div>
-                            <div style="font-size:12px; opacity:0.9;"><strong>Service:</strong> ${r.service}</div>
-                            <div style="font-size:12px; opacity:0.9;"><strong>Next Step:</strong> ${r.next_step}</div>
+                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:16px; border-radius:6px; color:#fff; margin-bottom:12px;">
+                            <div style="color:#3B82F6; font-weight:700; margin-bottom:10px; font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">🎯 Priority SITG Service Alignment</div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Recommended Service:</strong> ${r.service}</div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Resource Path:</strong> ${r.resource}</div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Whitepaper:</strong> ${r.whitepaper}</div>
+                            <div style="font-size:13px; color:#10B981; font-weight:600; margin-top:8px;">Next Action: ${r.next_step}</div>
                         </div>
                     `;
                 }
 
+                // 2. Render background documentation references second
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 12px; font-size:12px; border-radius:4px; font-family:sans-serif; border: 1px solid #1E293B; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">No documents found.</div>`;
+                    if(!output.recommendations) {
+                        resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 16px; font-size:13px; border-radius:6px; border: 1px solid #1E293B;">No exact matches found. Try another term.</div>`;
+                    }
                     return;
                 }
 
                 output.results.forEach(doc => {
                     const card = document.createElement("div");
-                    card.style.background = "#141B2D";
+                    card.style.background = "#111827";
                     card.style.border = "1px solid #1E293B";
-                    card.style.padding = "10px";
-                    card.style.borderRadius = "4px";
-                    card.style.marginBottom = "6px";
-                    card.style.fontFamily = "sans-serif";
-                    card.style.boxShadow = "0 10px 15px -3px rgba(0,0,0,0.3)";
+                    card.style.padding = "14px";
+                    card.style.borderRadius = "6px";
+                    card.style.removeAttribute = "margin-bottom";
+                    card.style.marginBottom = "10px";
                     
                     card.innerHTML = `
-                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:13px; display:block; margin-bottom:2px;">${doc.title}</a>
-                        <div style="color:#9CA3AF; font-size:11px; line-height:1.4;">${doc.desc}</div>
+                        <div style="font-size:11px; color:#9CA3AF; text-transform:uppercase; margin-bottom:4px; font-weight:600;">${doc.type}</div>
+                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title} &rarr;</a>
+                        <div style="color:#D1D5DB; font-size:12px; line-height:1.5;">${doc.desc}</div>
                     `;
                     resultsTarget.appendChild(card);
                 });
