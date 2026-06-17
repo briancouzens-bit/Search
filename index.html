@@ -14,7 +14,7 @@
             overflow: hidden;
         }
 
-        /* Clean Trigger Button */
+        /* Clean Trigger Button stuck to top-left of its iframe wrapper container */
         .sitg-trigger-btn {
             background: #141B2D;
             color: #F9FAFB;
@@ -29,6 +29,9 @@
             gap: 8px;
             transition: all 0.2s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .sitg-trigger-btn:hover {
@@ -36,7 +39,7 @@
             background: #172237;
         }
 
-        /* Full Screen Pop-up Modal Overrides */
+        /* Full Screen Pop-up Modal Overrides covering layout frame cleanly */
         #sitg-search-modal {
             display: none;
             position: fixed;
@@ -79,20 +82,23 @@
             const recTarget = document.getElementById("sitg-recommendations-target");
             const resultsTarget = document.getElementById("sitg-results-target");
 
-            // Open Pop-up Logic
+            // Open popup layout view trigger
             openBtn.addEventListener("click", () => {
                 searchModal.style.display = "block";
                 searchInput.focus();
-                // Request Wix to expand the container frame to full screen if supported
-                window.parent.postMessage("TEMPLATE_RESIZE_REQUEST_FULL", "*");
+                
+                // Emits scaling pass instructions straight up to Wix element block window layer container
+                window.parent.postMessage("zoom_iframe_fullscreen", "*");
             });
 
-            // Close Pop-up Logic
             function closePopup() {
                 searchModal.style.display = "none";
                 searchInput.value = "";
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
+                
+                // Emits reduction layout message to shrink frame back down to small button state
+                window.parent.postMessage("shrink_iframe_to_button", "*");
             }
 
             closeBtn.addEventListener("click", closePopup);
@@ -100,7 +106,6 @@
                 if (e.key === "Escape") closePopup();
             });
 
-            // Engine Handling
             searchInput.addEventListener("input", (e) => {
                 const query = e.target.value;
                 const output = engine.search(query);
@@ -110,60 +115,36 @@
             function renderUI(query, output) {
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
-
                 if (!query.trim()) return;
 
                 if (output.recommendations) {
                     const r = output.recommendations;
-                    const confClass = `sitg-conf-${r.confidence.toLowerCase()}`;
-                    
                     recTarget.innerHTML = `
                         <div class="sitg-rec-panel">
                             <div class="sitg-rec-title">🎯 SITG Strategic Alignment</div>
                             <div class="sitg-rec-grid">
-                                <div class="sitg-rec-block">
-                                    <div class="sitg-block-lbl">Recommended Service</div>
-                                    <div class="sitg-block-val">${r.service}<span class="sitg-confidence-tag ${confClass}">${r.confidence} Confidence</span></div>
-                                </div>
-                                <div class="sitg-rec-block">
-                                    <div class="sitg-block-lbl">Recommended Resource</div>
-                                    <div class="sitg-block-val">${r.resource}</div>
-                                </div>
-                                <div class="sitg-rec-block">
-                                    <div class="sitg-block-lbl">Recommended Whitepaper</div>
-                                    <div class="sitg-block-val">${r.whitepaper}</div>
-                                </div>
-                                <div class="sitg-rec-block">
-                                    <div class="sitg-block-lbl">Recommended Next Step</div>
-                                    <div class="sitg-block-val">${r.next_step}</div>
-                                </div>
+                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Service</div><div class="sitg-block-val">${r.service}</div></div>
+                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Resource</div><div class="sitg-block-val">${r.resource}</div></div>
+                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Whitepaper</div><div class="sitg-block-val">${r.whitepaper}</div></div>
+                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Next Step</div><div class="sitg-block-val">${r.next_step}</div></div>
                             </div>
                         </div>
                     `;
                 }
 
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: var(--sitg-text-mid); padding: 40px;">No exact documents found matching criteria.</div>`;
+                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; padding: 40px;">No exact documents found matching criteria.</div>`;
                     return;
                 }
 
                 output.results.forEach(doc => {
                     const card = document.createElement("div");
                     card.className = "sitg-result-card";
-                    
-                    // target="_top" forces the link to open in the main browser window, navigating away from the search perfectly
                     card.innerHTML = `
-                        <div class="sitg-card-meta">
-                            <span class="sitg-type-badge">${doc.type}</span>
-                        </div>
+                        <div class="sitg-card-meta"><span class="sitg-type-badge">${doc.type}</span></div>
                         <a href="${doc.url}" class="sitg-card-title" target="_top">${doc.title}</a>
                         <div class="sitg-card-desc">${doc.desc}</div>
                     `;
-                    
-                    card.querySelector("a").addEventListener("click", () => {
-                        engine.trackClick(query, doc.url);
-                    });
-
                     resultsTarget.appendChild(card);
                 });
             }
