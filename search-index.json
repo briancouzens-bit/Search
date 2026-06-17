@@ -1,151 +1,203 @@
-{
-  "synonyms": {
-    "pqc": ["post-quantum cryptography", "post quantum cryptography", "quantum safe"],
-    "hndl": ["harvest now decrypt later", "harvest now", "decrypt later"],
-    "crypto agility": ["cryptographic agility", "crypto-agility", "cryptographic flexibility"],
-    "q-day": ["quantum day", "quantum computing threat", "qday"],
-    "pki": ["public key infrastructure", "key management", "certificate authority"],
-    "soc": ["security operations centre", "security operations center", "soc2"]
-  },
-  "intent_keywords": {
-    "commercial": ["consulting", "assessment", "service", "programme", "transformation", "audit", "validation", "firm", "expert", "hire", "buy", "vendor", "review", "sprint"]
-  },
-  "recommendations": [
-    {
-      "tokens": ["quantum risk", "hndl", "quantum security", "q-day", "harvest now", "decrypt later", "quantum day"],
-      "service": "Cyber Risk & Resilience",
-      "confidence": "High",
-      "resource": "Plain English Translator",
-      "whitepaper": "Navigating Post-Quantum Risk Management",
-      "next_step": "PQC Discovery Sprint"
-    },
-    {
-      "tokens": ["pqc", "ml-kem", "ml-dsa", "slh-dsa", "nist pqc", "post-quantum cryptography", "post quantum cryptography"],
+[
+  {
+    "keywords": ["sitg", "consulting", "home", "main", "pipeline"],
+    "title": "SITG Consulting | Quantum Risk & Governance",
+    "type": "Core Pillar",
+    "url": "/",
+    "desc": "Enterprise transformation, governance matrix mapping, quantum risk mitigation, and PQC strategic delivery.",
+    "priority_alignment": {
       "service": "PQC Discovery Sprint",
-      "confidence": "High",
-      "resource": "Lexicon",
-      "whitepaper": "NIST PQC Standards Migration Blueprint",
-      "next_step": "Quantum Trust & PQC Assurance Services"
-    },
-    {
-      "tokens": ["cryptographic agility", "crypto agility", "pki", "key management", "modernisation", "transformation", "cryptographic modernisation"],
-      "service": "Cryptographic Transformation & Modernisation",
-      "confidence": "High",
-      "resource": "Lexicon",
-      "whitepaper": "Enterprise Cryptographic Inventory Framework",
-      "next_step": "PQC Discovery Sprint"
-    },
-    {
-      "tokens": ["cryptographic governance", "risk governance", "technology risk", "board risk", "cyber governance"],
-      "service": "Cryptographic Transformation & Modernisation",
-      "confidence": "Medium",
-      "resource": "Plain English Translator",
-      "whitepaper": "Board-Level Cyber Risk Reporting Guidelines",
-      "next_step": "Thematic Reviews"
-    },
-    {
-      "tokens": ["hash function", "asymmetric", "symmetric", "encryption", "cipher"],
-      "service": "Cryptographic Transformation & Modernisation",
-      "confidence": "Low",
-      "resource": "Lexicon",
-      "whitepaper": "Modern Cryptographic Algorithm Baselines",
-      "next_step": "Cyber Discovery Sprint"
-    },
-    {
-      "tokens": ["cyber resilience", "operational resilience", "enterprise resilience", "resilience"],
-      "service": "Cyber Risk & Resilience",
-      "confidence": "High",
-      "resource": "Plain English Translator",
-      "whitepaper": "Operational Resilience Architecture Models",
-      "next_step": "Thematic Reviews"
-    },
-    {
-      "tokens": ["transformation", "programme delivery", "programme governance", "operating model", "change management"],
-      "service": "Transformation Portfolio",
-      "confidence": "High",
-      "resource": "FAQs",
-      "whitepaper": "Managing Complex Technical Infrastructure Programs",
-      "next_step": "Discovery Sprint"
-    },
-    {
-      "tokens": ["independent validation", "assurance", "testing", "audit", "controls validation", "pqc assurance", "quantum assurance"],
+      "resource": "The Lexicon",
+      "whitepaper": "Quantum Trust & PQC Assurance Services",
+      "next_step": "Assess your enterprise infrastructure for strategic Q-Day readiness."
+    }
+  },
+  {
+    "keywords": ["sprint", "discovery", "pqc discovery", "10-20 days", "roadmap"],
+    "title": "PQC Discovery Sprint",
+    "type": "Core Service",
+    "url": "/discovery-sprint",
+    "desc": "An intensive 10-20 day operational evaluation designed to transform your infrastructure migration roadmap.",
+    "priority_alignment": {
+      "service": "PQC Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "QCAS - The Standard",
+      "next_step": "Secure an initial strategic Discovery Sprint window."
+    }
+  },
+  {
+    "keywords": ["qcas", "standard", "assurance", "cryptographic assurance", "framework"],
+    "title": "QCAS - The Standard",
+    "type": "Core Service",
+    "url": "/quantum-cryptographic-assurance-standard",
+    "desc": "Review the Quantum Cryptographic Assurance Standard (QCAS) structural matrix built for enterprise data perimeters.",
+    "priority_alignment": {
       "service": "Quantum Trust & PQC Assurance Services",
-      "confidence": "High",
-      "resource": "FAQs",
-      "whitepaper": "Post-Quantum Cryptographic Control Assurance",
-      "next_step": "Cyber Risk & Resilience"
+      "resource": "The Lexicon",
+      "whitepaper": "QCAS Structural Documentation",
+      "next_step": "Review your cryptographic controls against the standard."
     }
-  ],
-  "documents": [
-    {
-      "title": "Cyber Risk & Resilience",
-      "type": "Services",
-      "desc": "Align corporate technical posture against evolving national security thresholds and operational enterprise risks.",
-      "url": "/cyber-risk-resilience",
-      "content": "Enterprise cyber governance technology risk operational controls resilience strategies and board advisory structures."
-    },
-    {
-      "title": "PQC Discovery Sprint",
-      "type": "Discovery Sprint",
-      "desc": "Rapid algorithmic and infrastructure impact assessments evaluating software readiness for quantum migration targets.",
-      "url": "/cyber-discovery-sprint",
-      "content": "Post quantum cryptography asset localization baseline testing schedules risk categorization profiles and scoping windows."
-    },
-    {
-      "title": "Cryptographic Transformation & Modernisation",
-      "type": "Services",
-      "desc": "Transition legacy architectural reliance into crypto-agile modern validation deployments seamlessly.",
-      "url": "/cryptographic-transformation-and-modernisation",
-      "content": "Public key infrastructure certificate engine swaps algorithm rotation controls and structural decoupling."
-    },
-    {
-      "title": "Quantum Trust & PQC Assurance Services",
-      "type": "Services",
-      "desc": "Rigorous independent execution audits verifying target configurations against regulatory standard compliance benchmarks.",
-      "url": "/quantum-trust-pqc-assurance-services",
-      "content": "Independent validation testing control verification report delivery risk mitigation signing procedures."
-    },
-    {
-      "title": "Thematic Reviews",
-      "type": "Thematic Reviews",
-      "desc": "Deep dive structural health reviews tracking organizational technical risk profiles across disparate operational frameworks.",
-      "url": "/thematic-reviews",
-      "content": "Broad control identification testing verification mapping industry trends posture optimization."
-    },
-    {
-      "title": "Plain English Translator",
-      "type": "Plain English Translator",
-      "desc": "Instant, context-aware utility deciphering dense compliance and quantum jargon into transparent operational metrics.",
-      "url": "/plainenglish",
-      "content": "Jargon clean definition processing clear executive messaging mapping risk logic plain words simplified."
-    },
-    {
-      "title": "SITG Strategic Knowledge Lexicon",
-      "type": "Lexicon",
-      "desc": "The definitive glossary compilation detailing quantum-safe vocabulary and standard operational terminology definitions.",
-      "url": "/lexicon",
-      "content": "ML-KEM ML-DSA SLH-DSA NIST post-quantum migration definitions core terminology index reference mappings."
-    },
-    {
-      "title": "Quantum Risk and PQC Governance FAQ",
-      "type": "FAQs",
-      "desc": "Expert actionable answers detailing governance mechanisms and implementation criteria for corporate structures.",
-      "url": "/faq-quantum-risk-pqc-governance-cyber-resilience",
-      "content": "Frequently asked questions solutions timeline horizons operational deployment criteria risks mitigation execution."
-    },
-    {
-      "title": "NIST Cybersecurity Framework 2.0 (CSF 2.0) Adaptation Strategy",
-      "type": "Whitepapers",
-      "desc": "An authoritative whitepaper detailing organizational compliance mapping across updated zero-trust criteria.",
-      "url": "/nist-cybersecurity-framework-2-0-csf-2-0",
-      "content": "Strategic roadmap governance optimization asset profiles validation reporting matrices execution guidelines."
-    },
-    {
-      "title": "Navigating Post-Quantum Risk Management",
-      "type": "Whitepapers",
-      "desc": "Strategic publication overviewing corporate risk paths and threat tracking timelines ahead of system changes.",
-      "url": "/blog-posts-sitemap.xml",
-      "content": "Harvest now decrypt later mitigation frameworks corporate defense investment timelines threat modeling profiles."
+  },
+  {
+    "keywords": ["trust", "pqc assurance", "security services", "encryption", "quantum trust"],
+    "title": "Quantum Trust & PQC Assurance Services",
+    "type": "Core Service",
+    "url": "/quantum-trust-pqc-assurance-services",
+    "desc": "Custom deployment configurations and advanced architectural design to insulate critical corporate assets.",
+    "priority_alignment": {
+      "service": "Quantum Trust & PQC Assurance Services",
+      "resource": "The Lexicon",
+      "whitepaper": "QCAS - The Standard",
+      "next_step": "Evaluate technical perimeter controls with our security specialists."
     }
-  ]
-}
+  },
+  {
+    "keywords": ["cyber risk", "resilience", "expert insights", "continuity", "threats"],
+    "title": "Cyber Risk & Resilience",
+    "type": "Core Service",
+    "url": "/cyber-risk-resilience",
+    "desc": "Strategic operational continuity consulting and risk architecture mapping against emerging vector threats.",
+    "priority_alignment": {
+      "service": "Cyber Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "NIST: CSF2.0 Matrix Alignment",
+      "next_step": "Evaluate your current organizational resilience posture score."
+    }
+  },
+  {
+    "keywords": ["cyber discovery", "online sprint", "booking", "cyber sprint"],
+    "title": "Cyber Discovery Sprint",
+    "type": "Core Service",
+    "url": "/cyber-discovery-sprint",
+    "desc": "Book an online operational review sprint to rapidly deliver clear, comprehensive visibility over cybersecurity exposures.",
+    "priority_alignment": {
+      "service": "Cyber Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "NIST: CSF2.0 Matrix Alignment",
+      "next_step": "Reserve your online cyber discovery slot via our scheduling deck."
+    }
+  },
+  {
+    "keywords": ["nist", "csf2.0", "cybersecurity framework", "compliance", "government"],
+    "title": "NIST: CSF2.0 Alignment Matrix",
+    "type": "Framework Guidance",
+    "url": "/nist-cybersecurity-framework-2-0-csf-2-0",
+    "desc": "Deep-dive mapping and strategy alignment utilizing the updated NIST CSF2.0 infrastructure compliance framework.",
+    "priority_alignment": {
+      "service": "Cyber Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "Cyber Risk & Resilience Briefing",
+      "next_step": "Map your present controls directly to modern NIST guidelines."
+    }
+  },
+  {
+    "keywords": ["lexicon", "dictionary", "terms", "definitions", "vocabulary"],
+    "title": "The Lexicon of Everything",
+    "type": "Knowledge Hub",
+    "url": "/lexicon",
+    "desc": "Your definitive cross-reference engine for PQC, Cyber Governance, Risk, Resilience, and Digital Transformation.",
+    "priority_alignment": {
+      "service": "Plain English Translator",
+      "resource": "The Lexicon",
+      "whitepaper": "Authoring & Executive Publications",
+      "next_step": "Search our plain English terms database for clarity on key subjects."
+    }
+  },
+  {
+    "keywords": ["translator", "plain english", "explainer", "clear terms"],
+    "title": "Plain English Translator",
+    "type": "Knowledge Hub",
+    "url": "/plainenglish",
+    "desc": "Demystifying deep technical methodologies and cryptographic threats into actionable corporate logic.",
+    "priority_alignment": {
+      "service": "Plain English Translator",
+      "resource": "The Lexicon",
+      "whitepaper": "FAQ - Quantum Risk",
+      "next_step": "Convert abstract technical risk into clear business exposure matrices."
+    }
+  },
+  {
+    "keywords": ["portfolio", "services offered", "solutions", "capabilities"],
+    "title": "Transformation Portfolio",
+    "type": "Capabilities List",
+    "url": "/services-offered",
+    "desc": "An end-to-end directory of SITG advisory configurations and post-quantum migration frameworks.",
+    "priority_alignment": {
+      "service": "PQC Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "QCAS - The Standard",
+      "next_step": "Download our comprehensive capabilities blueprint doc."
+    }
+  },
+  {
+    "keywords": ["publications", "white papers", "ghost writing", "policy notes", "executive briefs"],
+    "title": "Authoring & Executive Publications",
+    "type": "Resource Hub",
+    "url": "/authoring-executive-publications",
+    "desc": "Elite white paper production, policy analyses, corporate positioning briefs, and expert technical ghostwriting.",
+    "priority_alignment": {
+      "service": "Plain English Translator",
+      "resource": "The Lexicon",
+      "whitepaper": "Thematic Reviews Portfolio",
+      "next_step": "Commission a dedicated research brief for your executive board."
+    }
+  },
+  {
+    "keywords": ["reviews", "thematic", "assessments", "industry trends"],
+    "title": "Thematic Reviews",
+    "type": "Resource Hub",
+    "url": "/thematic-reviews",
+    "desc": "Comprehensive structural overviews evaluating macroeconomic security paradigms and horizontal sector compliance trends.",
+    "priority_alignment": {
+      "service": "Cyber Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "Authoring & Executive Publications",
+      "next_step": "Access contemporary thematic industry risk reports."
+    }
+  },
+  {
+    "keywords": ["faq", "questions", "q-day", "pqr", "governance faq"],
+    "title": "FAQ - Quantum Risk & PQC Governance",
+    "type": "Knowledge Hub",
+    "url": "/faq-quantum-risk-pqc-governance-cyber",
+    "desc": "Focused inquiries answering pressing corporate questions regarding timeline risk, PQC governance, and migration costs.",
+    "priority_alignment": {
+      "service": "PQC Discovery Sprint",
+      "resource": "The Lexicon",
+      "whitepaper": "General FAQ Tracker",
+      "next_step": "Examine our operational FAQ overview for rapid answers."
+    }
+  },
+  {
+    "keywords": ["general faq", "help desk", "basic questions", "corporate info"],
+    "title": "FAQ Portal",
+    "type": "Knowledge Hub",
+    "url": "/faq",
+    "desc": "General platform inquiries exploring corporate operations, project timelines, and engagement parameters.",
+    "priority_alignment": null
+  },
+  {
+    "keywords": ["about us", "brian couzens", "team", "leadership", "biography"],
+    "title": "Our Team | Meet the Advisory Leadership",
+    "type": "Corporate Info",
+    "url": "/about-us",
+    "desc": "Learn about the backgrounds of Brian Couzens and our elite network of sovereign advisory experts.",
+    "priority_alignment": null
+  },
+  {
+    "keywords": ["transformation change", "about sitg", "advisory profile", "company vision"],
+    "title": "About SITG | Transformation Change Insights",
+    "type": "Corporate Info",
+    "url": "/about-sitg",
+    "desc": "Our foundational operating theory—driving highly critical, structured transformation change across international pipelines.",
+    "priority_alignment": null
+  },
+  {
+    "keywords": ["blog", "insights", "articles", "news", "updates"],
+    "title": "SITG Blog | Strategic Insights Pipeline",
+    "type": "Resource Hub",
+    "url": "/blog",
+    "desc": "Real-time intellectual capital updating you on quantum cryptography legislation, framework modifications, and tech updates.",
+    "priority_alignment": null
+  }
+]

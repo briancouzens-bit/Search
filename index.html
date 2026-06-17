@@ -3,37 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SITG Knowledge Platform</title>
-    <link rel="stylesheet" href="search-overlay.css">
+    <title>SITG Core Knowledge Search</title>
     <style>
         html, body {
             background: #0B0F19 !important;
             margin: 0 !important;
-            padding: 12px !important;
+            padding: 16px !important;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow-x: hidden !important;
+            color: #F9FAFB;
         }
-
-        #sitg-search-modal {
-            display: block !important;
-            position: relative !important;
-            background: transparent !important;
-            width: 100% !important;
-            height: auto !important;
-        }
-
         .sitg-search-container {
-            max-width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: transparent !important;
-            box-shadow: none !important;
+            max-width: 100%;
+            margin: 0 auto;
         }
-
         .sitg-search-input-element {
-            padding: 10px 14px !important;
-            font-size: 14px !important;
-            height: 40px !important;
+            padding: 12px 16px !important;
+            font-size: 15px !important;
+            height: 46px !important;
             box-sizing: border-box;
             border-radius: 6px !important;
             background: #141B2D !important;
@@ -41,29 +27,77 @@
             border: 1px solid #1E293B !important;
             width: 100% !important;
             margin-bottom: 16px !important;
+            outline: none;
         }
-
-        #sitg-search-close-trigger {
-            display: none !important;
+        .sitg-search-input-element:focus {
+            border-color: #3B82F6 !important;
         }
-
-        #sitg-recommendations-target,
-        #sitg-results-target {
-            margin-top: 10px !important;
-            width: 100% !important;
+        .rec-box {
+            background: #141B2D; 
+            border: 1px solid #3B82F6; 
+            padding: 16px; 
+            border-radius: 6px; 
+            margin-bottom: 16px;
+        }
+        .rec-title {
+            color: #3B82F6; 
+            font-weight: 700; 
+            margin-bottom: 10px; 
+            font-size: 13px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+        .rec-line {
+            font-size: 13px; 
+            margin-bottom: 6px;
+            color: #E5E7EB;
+        }
+        .rec-link {
+            color: #3B82F6; 
+            font-weight: 600; 
+            text-decoration: none;
+        }
+        .rec-link:hover {
+            text-decoration: underline;
+        }
+        .result-card {
+            background: #111827;
+            border: 1px solid #1E293B;
+            padding: 14px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+        .result-type {
+            font-size: 11px; 
+            color: #9CA3AF; 
+            text-transform: uppercase; 
+            margin-bottom: 4px; 
+            font-weight: 600;
+        }
+        .result-title {
+            color: #3B82F6; 
+            font-weight: 600; 
+            text-decoration: none; 
+            font-size: 14px; 
+            display: block; 
+            margin-bottom: 4px;
+        }
+        .result-title:hover {
+            text-decoration: underline;
+        }
+        .result-desc {
+            color: #D1D5DB; 
+            font-size: 12px; 
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-    <div id="sitg-search-modal">
-        <div class="sitg-search-container">
-            <div class="sitg-search-header-box">
-                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Type to explore services, references, & whitepapers..." autocomplete="off">
-            </div>
-            <div id="sitg-recommendations-target"></div>
-            <div id="sitg-results-target"></div>
-        </div>
+    <div class="sitg-search-container">
+        <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Type to scan SITG pillars, frameworks, and service paths..." autocomplete="off">
+        <div id="sitg-recommendations-target"></div>
+        <div id="sitg-results-target"></div>
     </div>
 
     <script src="sitg-search-engine.js"></script>
@@ -75,6 +109,8 @@
             const searchInput = document.getElementById("sitg-search-input");
             const recTarget = document.getElementById("sitg-recommendations-target");
             const resultsTarget = document.getElementById("sitg-results-target");
+
+            searchInput.focus();
 
             searchInput.addEventListener("input", (e) => {
                 const query = e.target.value;
@@ -88,49 +124,43 @@
 
                 if (!query.trim()) return;
 
-                // Priority 1: Render core strategic alignments first
+                // 1. Output Strategy Alignments ONLY if matched keyword specifies one
                 if (output.recommendations) {
                     const r = output.recommendations;
                     
-                    // Safely format the strategic URLs back to your live Wix site
-                    const serviceUrl = r.service_url ? `https://www.sitg-consulting.com/${r.service_url.replace(/^\//, '')}` : '#';
-                    const resourceUrl = r.resource_url ? `https://www.sitg-consulting.com/${r.resource_url.replace(/^\//, '')}` : '#';
-                    const whitepaperUrl = r.whitepaper_url ? `https://www.sitg-consulting.com/${r.whitepaper_url.replace(/^\//, '')}` : '#';
+                    // Match paths against clean mapping positions to prevent broken trailing links
+                    const parentData = engine.data.find(item => item.priority_alignment === r) || { url: '/' };
+                    const targetBaseUrl = `https://www.sitg-consulting.com${parentData.url}`;
 
                     recTarget.innerHTML = `
-                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:16px; border-radius:6px; color:#fff; margin-bottom:12px;">
-                            <div style="color:#3B82F6; font-weight:700; margin-bottom:10px; font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">🎯 Priority SITG Service Alignment</div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Recommended Service:</strong> <a href="${serviceUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.service} &rarr;</a></div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Resource Path:</strong> <a href="${resourceUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.resource} &rarr;</a></div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Whitepaper:</strong> <a href="${whitepaperUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.whitepaper} &rarr;</a></div>
+                        <div class="rec-box">
+                            <div class="rec-title">🎯 Priority SITG Service Alignment</div>
+                            <div class="rec-line"><strong>Recommended Service:</strong> <a class="rec-link" href="${targetBaseUrl}" target="_top">${r.service} &rarr;</a></div>
+                            <div class="rec-line"><strong>Resource Path:</strong> <a class="rec-link" href="https://www.sitg-consulting.com/lexicon" target="_top">${r.resource} &rarr;</a></div>
+                            <div class="rec-line"><strong>Strategic Documentation:</strong> <a class="rec-link" href="${targetBaseUrl}" target="_top">${r.whitepaper} &rarr;</a></div>
                             <div style="font-size:13px; color:#10B981; font-weight:600; margin-top:8px;">Next Action: ${r.next_step}</div>
                         </div>
                     `;
                 }
 
-                // Priority 2: Render background reference documentation second
+                // 2. Graceful fallback for unrecognized terms (No made-up text blocks)
                 if (output.results.length === 0) {
-                    if(!output.recommendations) {
-                        resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 16px; font-size:13px; border-radius:6px; border: 1px solid #1E293B;">No exact matches found. Try another term.</div>`;
-                    }
+                    resultsTarget.innerHTML = `
+                        <div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 16px; font-size:13px; border-radius:6px; border: 1px solid #1E293B;">
+                            No matching SITG core pillars discovered. Try querying keywords like <strong>"Sprint"</strong>, <strong>"QCAS"</strong>, <strong>"NIST"</strong>, or <strong>"Lexicon"</strong>.
+                        </div>`;
                     return;
                 }
 
+                // 3. Render clean structural results cards
                 output.results.forEach(doc => {
                     const card = document.createElement("div");
-                    card.style.background = "#111827";
-                    card.style.border = "1px solid #1E293B";
-                    card.style.padding = "14px";
-                    card.style.borderRadius = "6px";
-                    card.style.marginBottom = "10px";
-                    
-                    // Forces document urls to build cleanly on top of your live domain
-                    const absoluteUrl = `https://www.sitg-consulting.com/${doc.url.replace(/^\//, '')}`;
+                    card.className = "result-card";
                     
                     card.innerHTML = `
-                        <div style="font-size:11px; color:#9CA3AF; text-transform:uppercase; margin-bottom:4px; font-weight:600;">${doc.type}</div>
-                        <a href="${absoluteUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title} &rarr;</a>
-                        <div style="color:#D1D5DB; font-size:12px; line-height:1.5;">${doc.desc}</div>
+                        <div class="result-type">${doc.type}</div>
+                        <a href="https://www.sitg-consulting.com${doc.url}" target="_top" class="result-title">${doc.title} &rarr;</a>
+                        <div class="result-desc">${doc.desc}</div>
                     `;
                     resultsTarget.appendChild(card);
                 });
