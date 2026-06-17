@@ -14,7 +14,6 @@
             overflow-x: hidden !important;
         }
 
-        /* Displays natively as a flat, interactive widget panel on your page */
         #sitg-search-modal {
             display: block !important;
             position: relative !important;
@@ -48,7 +47,6 @@
             display: none !important;
         }
 
-        /* Results print sequentially directly inside the frame canvas */
         #sitg-recommendations-target,
         #sitg-results-target {
             margin-top: 10px !important;
@@ -90,21 +88,27 @@
 
                 if (!query.trim()) return;
 
-                // 1. Render core services & priority paths first
+                // Priority 1: Render core strategic alignments first
                 if (output.recommendations) {
                     const r = output.recommendations;
+                    
+                    // Safely format the strategic URLs back to your live Wix site
+                    const serviceUrl = r.service_url ? `https://www.sitg-consulting.com/${r.service_url.replace(/^\//, '')}` : '#';
+                    const resourceUrl = r.resource_url ? `https://www.sitg-consulting.com/${r.resource_url.replace(/^\//, '')}` : '#';
+                    const whitepaperUrl = r.whitepaper_url ? `https://www.sitg-consulting.com/${r.whitepaper_url.replace(/^\//, '')}` : '#';
+
                     recTarget.innerHTML = `
                         <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:16px; border-radius:6px; color:#fff; margin-bottom:12px;">
                             <div style="color:#3B82F6; font-weight:700; margin-bottom:10px; font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">🎯 Priority SITG Service Alignment</div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Recommended Service:</strong> ${r.service}</div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Resource Path:</strong> ${r.resource}</div>
-                            <div style="font-size:13px; margin-bottom:6px;"><strong>Whitepaper:</strong> ${r.whitepaper}</div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Recommended Service:</strong> <a href="${serviceUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.service} &rarr;</a></div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Resource Path:</strong> <a href="${resourceUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.resource} &rarr;</a></div>
+                            <div style="font-size:13px; margin-bottom:6px;"><strong>Whitepaper:</strong> <a href="${whitepaperUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none;">${r.whitepaper} &rarr;</a></div>
                             <div style="font-size:13px; color:#10B981; font-weight:600; margin-top:8px;">Next Action: ${r.next_step}</div>
                         </div>
                     `;
                 }
 
-                // 2. Render background documentation references second
+                // Priority 2: Render background reference documentation second
                 if (output.results.length === 0) {
                     if(!output.recommendations) {
                         resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 16px; font-size:13px; border-radius:6px; border: 1px solid #1E293B;">No exact matches found. Try another term.</div>`;
@@ -118,12 +122,14 @@
                     card.style.border = "1px solid #1E293B";
                     card.style.padding = "14px";
                     card.style.borderRadius = "6px";
-                    card.style.removeAttribute = "margin-bottom";
                     card.style.marginBottom = "10px";
+                    
+                    // Forces document urls to build cleanly on top of your live domain
+                    const absoluteUrl = `https://www.sitg-consulting.com/${doc.url.replace(/^\//, '')}`;
                     
                     card.innerHTML = `
                         <div style="font-size:11px; color:#9CA3AF; text-transform:uppercase; margin-bottom:4px; font-weight:600;">${doc.type}</div>
-                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title} &rarr;</a>
+                        <a href="${absoluteUrl}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title} &rarr;</a>
                         <div style="color:#D1D5DB; font-size:12px; line-height:1.5;">${doc.desc}</div>
                     `;
                     resultsTarget.appendChild(card);
