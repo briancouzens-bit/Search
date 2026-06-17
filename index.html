@@ -3,44 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SITG Consulting - Knowledge Search Platform Demo</title>
+    <title>SITG Search Estate</title>
     <link rel="stylesheet" href="search-overlay.css">
     <style>
+        /* Hide the default overlay display behavior to force it to show directly on load */
+        #sitg-search-modal {
+            display: block !important;
+            position: absolute !important;
+            background: transparent !important;
+            padding: 20px 10px !important;
+        }
+        /* Hide unnecessary exit layout controls since it lives native in your embed frame */
+        #sitg-search-close-trigger {
+            display: none !important;
+        }
         body {
-            background-color: #030712;
-            color: #F9FAFB;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0B0F19;
             margin: 0;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-        }
-        .demo-wrap {
-            text-align: center;
-            max-width: 600px;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            letter-spacing: -0.05em;
-        }
-        p {
-            color: #9CA3AF;
-            margin-bottom: 30px;
+            padding: 0;
+            overflow-x: hidden;
         }
     </style>
 </head>
 <body>
 
-    <div class="demo-wrap">
-        <h1>SITG Knowledge Estate</h1>
-        <p>The global header injection will automatically add the search trigger. Click the button in the header or use the demo shortcut to open the overlay panel.</p>
-    </div>
-
-    <!-- Intelligent Search Panel Overlay Shell -->
     <div id="sitg-search-modal">
         <div class="sitg-search-container">
             <div class="sitg-search-header-box">
@@ -58,42 +44,12 @@
             const engine = new SITGSearchEngine("search-index.json");
             await engine.initialize();
 
-            const searchModal = document.getElementById("sitg-search-modal");
             const searchInput = document.getElementById("sitg-search-input");
             const recTarget = document.getElementById("sitg-recommendations-target");
             const resultsTarget = document.getElementById("sitg-results-target");
 
-            function injectSearchTrigger() {
-                const trigger = document.createElement("button");
-                trigger.innerHTML = "🔍 Search Estate";
-                trigger.setAttribute("style", "position: fixed; top: 20px; right: 20px; z-index: 9999; background: #141B2D; color: #F9FAFB; border: 1px solid #1E293B; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); transition: all 0.2s;");
-                
-                trigger.addEventListener("mouseover", () => trigger.style.borderColor = "#3B82F6");
-                trigger.addEventListener("mouseout", () => trigger.style.borderColor = "#1E293B");
-                trigger.addEventListener("click", () => {
-                    searchModal.style.display = "block";
-                    searchInput.focus();
-                });
-                document.body.appendChild(trigger);
-            }
-
-            injectSearchTrigger();
-
-            document.getElementById("sitg-search-close-trigger").addEventListener("click", () => {
-                searchModal.style.display = "none";
-                searchInput.value = "";
-                recTarget.innerHTML = "";
-                resultsTarget.innerHTML = "";
-            });
-
-            window.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") {
-                    searchModal.style.display = "none";
-                    searchInput.value = "";
-                    recTarget.innerHTML = "";
-                    resultsTarget.innerHTML = "";
-                }
-            });
+            // Auto-focus input box as soon as the embedded view loads up inside Wix
+            searchInput.focus();
 
             searchInput.addEventListener("input", (e) => {
                 const query = e.target.value;
@@ -126,7 +82,7 @@
                                 <div class="sitg-rec-block">
                                     <div class="sitg-block-lbl">Recommended Whitepaper</div>
                                     <div class="sitg-block-val">${r.whitepaper}</div>
-                                </div>
+                                }
                                 <div class="sitg-rec-block">
                                     <div class="sitg-block-lbl">Recommended Next Step</div>
                                     <div class="sitg-block-val">${r.next_step}</div>
@@ -137,7 +93,7 @@
                 }
 
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: var(--sitg-text-mid); padding: 40px;">No exact or fallback matches found in the knowledge estate. Try checking synonyms or expanding the query.</div>`;
+                    resultsTarget.innerHTML = `<div style="text-align: center; color: var(--sitg-text-mid); padding: 40px;">No exact documents found matching this configuration criteria.</div>`;
                     return;
                 }
 
@@ -148,7 +104,7 @@
                         <div class="sitg-card-meta">
                             <span class="sitg-type-badge">${doc.type}</span>
                         </div>
-                        <a href="${doc.url}" class="sitg-card-title" target="_blank">${doc.title}</a>
+                        <a href="${doc.url}" class="sitg-card-title" target="_top">${doc.title}</a>
                         <div class="sitg-card-desc">${doc.desc}</div>
                     `;
                     
