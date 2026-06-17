@@ -1,0 +1,136 @@
+:root {
+    --sitg-bg-main: #0B0F19;
+    --sitg-bg-card: #141B2D;
+    --sitg-accent: #3B82F6;
+    --sitg-accent-glow: rgba(59, 130, 246, 0.15);
+    --sitg-text-hi: #F9FAFB;
+    --sitg-text-mid: #9CA3AF;
+    --sitg-border: #1E293B;
+    --sitg-badge-high: #10B981;
+    --sitg-badge-med: #F59E0B;
+    --sitg-badge-low: #EF4444;
+}
+
+#sitg-search-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(3, 7, 18, 0.95);
+    z-index: 999999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--sitg-text-hi);
+    overflow-y: auto;
+    padding: 40px 20px;
+}
+
+.sitg-search-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.sitg-search-header-box {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.sitg-search-input-element {
+    width: 100%;
+    background: var(--sitg-bg-card);
+    border: 2px solid var(--sitg-border);
+    padding: 18px 24px;
+    border-radius: 12px;
+    font-size: 20px;
+    color: var(--sitg-text-hi);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.sitg-search-input-element:focus {
+    border-color: var(--sitg-accent);
+    box-shadow: 0 0 20px var(--sitg-accent-glow);
+}
+
+.sitg-close-btn {
+    position: absolute;
+    right: 24px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    color: var(--sitg-text-mid);
+    font-size: 24px; cursor: pointer;
+}
+
+.sitg-rec-panel {
+    background: linear-gradient(135deg, var(--sitg-bg-card) 0%, #172237 100%);
+    border: 1px solid var(--sitg-accent);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+}
+
+.sitg-rec-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--sitg-accent);
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.sitg-rec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .sitg-rec-grid { grid-template-columns: 1fr; }
+}
+
+.sitg-rec-block {
+    background: rgba(11, 15, 25, 0.6);
+    border: 1px solid var(--sitg-border);
+    padding: 14px; border-radius: 8px;
+}
+
+.sitg-block-lbl {
+    font-size: 11px; color: var(--sitg-text-mid); text-transform: uppercase; margin-bottom: 4px;
+}
+
+.sitg-block-val {
+    font-size: 15px; font-weight: 600; color: var(--sitg-text-hi);
+}
+
+.sitg-confidence-tag {
+    display: inline-block;
+    padding: 2px 8px; font-size: 11px; font-weight: bold;
+    border-radius: 4px; margin-left: 8px;
+    text-transform: uppercase;
+}
+
+.sitg-conf-high { background: rgba(16, 185, 129, 0.2); color: var(--sitg-badge-high); }
+.sitg-conf-medium { background: rgba(245, 158, 11, 0.2); color: var(--sitg-badge-med); }
+.sitg-conf-low { background: rgba(239, 68, 68, 0.2); color: var(--sitg-badge-low); }
+
+.sitg-result-card {
+    background: var(--sitg-bg-card);
+    border: 1px solid var(--sitg-border);
+    border-radius: 8px; padding: 20px;
+    margin-bottom: 16px; transition: transform 0.2s ease;
+}
+
+.sitg-result-card:hover {
+    transform: translateY(-2px); border-color: #2D3748;
+}
+
+.sitg-card-meta {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+}
+
+.sitg-type-badge {
+    background: #1E293B; color: var(--sitg-accent);
+    padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;
+}
+
+.sitg-card-title { font-size: 18px; font-weight: 600; color: var(--sitg-text-hi); text-decoration: none; }
+.sitg-card-title:hover { color: var(--sitg-accent); }
+.sitg-card-desc { font-size: 14px; color: var(--sitg-text-mid); line-height: 1.5; margin-top: 8px; }
