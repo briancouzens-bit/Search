@@ -6,22 +6,30 @@
     <title>SITG Search Estate</title>
     <link rel="stylesheet" href="search-overlay.css">
     <style>
-        /* Hide the default overlay display behavior to force it to show directly on load */
+        /* Force layout container elements to map flat and borderless */
         #sitg-search-modal {
             display: block !important;
             position: absolute !important;
             background: transparent !important;
-            padding: 20px 10px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: hidden !important;
         }
-        /* Hide unnecessary exit layout controls since it lives native in your embed frame */
         #sitg-search-close-trigger {
             display: none !important;
+        }
+        .sitg-search-header-box {
+            margin-bottom: 12px !important;
+        }
+        .sitg-search-input-element {
+            padding: 14px 18px !important;
+            font-size: 16px !important;
         }
         body {
             background-color: #0B0F19;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            overflow: hidden !important; /* Strips the scroll bar window */
         }
     </style>
 </head>
@@ -30,8 +38,7 @@
     <div id="sitg-search-modal">
         <div class="sitg-search-container">
             <div class="sitg-search-header-box">
-                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Search the SITG knowledge estate (e.g., ML-KEM, HNDL, Crypto Agility)..." autocomplete="off">
-                <button id="sitg-search-close-trigger" class="sitg-close-btn">&times;</button>
+                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Search the SITG knowledge estate..." autocomplete="off">
             </div>
             <div id="sitg-recommendations-target"></div>
             <div id="sitg-results-target"></div>
@@ -48,7 +55,6 @@
             const recTarget = document.getElementById("sitg-recommendations-target");
             const resultsTarget = document.getElementById("sitg-results-target");
 
-            // Auto-focus input box as soon as the embedded view loads up inside Wix
             searchInput.focus();
 
             searchInput.addEventListener("input", (e) => {
@@ -61,7 +67,14 @@
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
 
-                if (!query.trim()) return;
+                if (!query.trim()) {
+                    // Re-disable scroll engine constraints if clear
+                    document.body.style.overflow = "hidden";
+                    return;
+                }
+
+                // Expand view layout to allow result list tracking if user types active words
+                document.body.style.overflow = "auto";
 
                 if (output.recommendations) {
                     const r = output.recommendations;
@@ -82,7 +95,7 @@
                                 <div class="sitg-rec-block">
                                     <div class="sitg-block-lbl">Recommended Whitepaper</div>
                                     <div class="sitg-block-val">${r.whitepaper}</div>
-                                }
+                                </div>
                                 <div class="sitg-rec-block">
                                     <div class="sitg-block-lbl">Recommended Next Step</div>
                                     <div class="sitg-block-val">${r.next_step}</div>
@@ -93,7 +106,7 @@
                 }
 
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: var(--sitg-text-mid); padding: 40px;">No exact documents found matching this configuration criteria.</div>`;
+                    resultsTarget.innerHTML = `<div style="text-align: center; color: var(--sitg-text-mid); padding: 20px; font-size: 14px;">No exact documents found matching criteria.</div>`;
                     return;
                 }
 
