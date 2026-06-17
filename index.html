@@ -6,63 +6,73 @@
     <title>SITG Search Estate</title>
     <link rel="stylesheet" href="search-overlay.css">
     <style>
-        body {
-            background: transparent;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow: hidden;
+        /* Force everything to strip default margins and padding */
+        html, body {
+            background: transparent !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
         }
 
-        /* Clean Trigger Button stuck to top-left of its iframe wrapper container */
-        .sitg-trigger-btn {
-            background: #141B2D;
-            color: #F9FAFB;
-            border: 1px solid #1E293B;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .sitg-trigger-btn:hover {
-            border-color: #3B82F6;
-            background: #172237;
-        }
-
-        /* Full Screen Pop-up Modal Overrides covering layout frame cleanly */
         #sitg-search-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(3, 7, 18, 0.98);
-            z-index: 999999;
-            overflow-y: auto !important;
-            padding: 60px 20px 40px 20px !important;
+            display: block !important;
+            position: absolute !important;
+            background: transparent !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Remakes the container bar to align flatly against your Wix edge lines */
+        .sitg-search-container {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .sitg-search-header-box {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Shrinks down font size and padding to fit short headers */
+        .sitg-search-input-element {
+            padding: 8px 12px !important;
+            font-size: 13px !important;
+            height: 34px !important;
             box-sizing: border-box;
+            border-radius: 4px !important;
+            background: #141B2D !important;
+            color: #F9FAFB !important;
+            border: 1px solid #1E293B !important;
+        }
+
+        #sitg-search-close-trigger {
+            display: none !important;
+        }
+
+        /* Pushes search results pop-up window downwards out of header line view */
+        #sitg-recommendations-target,
+        #sitg-results-target {
+            position: fixed !important;
+            top: 50px;
+            left: 5%;
+            width: 90%;
+            z-index: 999999 !important;
+            max-height: 400px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
 
-    <button id="sitg-open-trigger" class="sitg-trigger-btn">
-        <span>🔍</span> Search Estate
-    </button>
-
     <div id="sitg-search-modal">
         <div class="sitg-search-container">
             <div class="sitg-search-header-box">
-                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Search the SITG knowledge estate..." autocomplete="off">
-                <button id="sitg-search-close-trigger" class="sitg-close-btn">&times;</button>
+                <input type="text" id="sitg-search-input" class="sitg-search-input-element" placeholder="Search..." autocomplete="off">
             </div>
             <div id="sitg-recommendations-target"></div>
             <div id="sitg-results-target"></div>
@@ -75,36 +85,9 @@
             const engine = new SITGSearchEngine("search-index.json");
             await engine.initialize();
 
-            const openBtn = document.getElementById("sitg-open-trigger");
-            const searchModal = document.getElementById("sitg-search-modal");
-            const closeBtn = document.getElementById("sitg-search-close-trigger");
             const searchInput = document.getElementById("sitg-search-input");
             const recTarget = document.getElementById("sitg-recommendations-target");
             const resultsTarget = document.getElementById("sitg-results-target");
-
-            // Open popup layout view trigger
-            openBtn.addEventListener("click", () => {
-                searchModal.style.display = "block";
-                searchInput.focus();
-                
-                // Emits scaling pass instructions straight up to Wix element block window layer container
-                window.parent.postMessage("zoom_iframe_fullscreen", "*");
-            });
-
-            function closePopup() {
-                searchModal.style.display = "none";
-                searchInput.value = "";
-                recTarget.innerHTML = "";
-                resultsTarget.innerHTML = "";
-                
-                // Emits reduction layout message to shrink frame back down to small button state
-                window.parent.postMessage("shrink_iframe_to_button", "*");
-            }
-
-            closeBtn.addEventListener("click", closePopup);
-            window.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") closePopup();
-            });
 
             searchInput.addEventListener("input", (e) => {
                 const query = e.target.value;
@@ -115,35 +98,37 @@
             function renderUI(query, output) {
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
+
                 if (!query.trim()) return;
 
                 if (output.recommendations) {
                     const r = output.recommendations;
                     recTarget.innerHTML = `
-                        <div class="sitg-rec-panel">
-                            <div class="sitg-rec-title">🎯 SITG Strategic Alignment</div>
-                            <div class="sitg-rec-grid">
-                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Service</div><div class="sitg-block-val">${r.service}</div></div>
-                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Resource</div><div class="sitg-block-val">${r.resource}</div></div>
-                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Whitepaper</div><div class="sitg-block-val">${r.whitepaper}</div></div>
-                                <div class="sitg-rec-block"><div class="sitg-block-lbl">Recommended Next Step</div><div class="sitg-block-val">${r.next_step}</div></div>
-                            </div>
+                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:15px; border-radius:6px; color:#fff; margin-bottom:10px; font-family:sans-serif;">
+                            <div style="color:#3B82F6; font-weight:bold; margin-bottom:8px;">🎯 SITG Alignment</div>
+                            <div style="font-size:12px; opacity:0.9;"><strong>Service:</strong> ${r.service}</div>
+                            <div style="font-size:12px; opacity:0.9;"><strong>Next Step:</strong> ${r.next_step}</div>
                         </div>
                     `;
                 }
 
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; padding: 40px;">No exact documents found matching criteria.</div>`;
+                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 15px; font-size:12px; border-radius:6px; font-family:sans-serif;">No documents found.</div>`;
                     return;
                 }
 
                 output.results.forEach(doc => {
                     const card = document.createElement("div");
-                    card.className = "sitg-result-card";
+                    card.style.background = "#141B2D";
+                    card.style.border = "1px solid #1E293B";
+                    card.style.padding = "12px";
+                    card.style.borderRadius = "6px";
+                    card.style.marginBottom = "8px";
+                    card.style.family = "sans-serif";
+                    
                     card.innerHTML = `
-                        <div class="sitg-card-meta"><span class="sitg-type-badge">${doc.type}</span></div>
-                        <a href="${doc.url}" class="sitg-card-title" target="_top">${doc.title}</a>
-                        <div class="sitg-card-desc">${doc.desc}</div>
+                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title}</a>
+                        <div style="color:#9CA3AF; font-size:12px; line-height:1.4;">${doc.desc}</div>
                     `;
                     resultsTarget.appendChild(card);
                 });
