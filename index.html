@@ -6,12 +6,13 @@
     <title>SITG Search Estate</title>
     <link rel="stylesheet" href="search-overlay.css">
     <style>
-        /* Force everything to strip default margins and padding */
+        /* Force everything to lock down to zero height until active */
         html, body {
             background: transparent !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
+            height: 34px !important; /* Forces the entire web page to stay perfectly short */
         }
 
         #sitg-search-modal {
@@ -21,10 +22,9 @@
             padding: 0 !important;
             margin: 0 !important;
             width: 100% !important;
-            height: auto !important;
+            height: 34px !important;
         }
 
-        /* Remakes the container bar to align flatly against your Wix edge lines */
         .sitg-search-container {
             max-width: 100% !important;
             margin: 0 !important;
@@ -38,9 +38,9 @@
             padding: 0 !important;
         }
 
-        /* Shrinks down font size and padding to fit short headers */
+        /* Tiny, flat, neat input bar style */
         .sitg-search-input-element {
-            padding: 8px 12px !important;
+            padding: 6px 12px !important;
             font-size: 13px !important;
             height: 34px !important;
             box-sizing: border-box;
@@ -48,22 +48,24 @@
             background: #141B2D !important;
             color: #F9FAFB !important;
             border: 1px solid #1E293B !important;
+            width: 100% !important;
         }
 
         #sitg-search-close-trigger {
             display: none !important;
         }
 
-        /* Pushes search results pop-up window downwards out of header line view */
+        /* The results panel pops OVER your website elements, not inside the page layout flow */
         #sitg-recommendations-target,
         #sitg-results-target {
             position: fixed !important;
-            top: 50px;
-            left: 5%;
-            width: 90%;
+            top: 40px;
+            left: 0;
+            width: 100%;
             z-index: 999999 !important;
-            max-height: 400px;
+            max-height: 350px;
             overflow-y: auto;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -99,13 +101,22 @@
                 recTarget.innerHTML = "";
                 resultsTarget.innerHTML = "";
 
-                if (!query.trim()) return;
+                if (!query.trim()) {
+                    // Shrink page rules completely back to standard flat dimensions if input is empty
+                    document.documentElement.style.height = "34px";
+                    document.body.style.height = "34px";
+                    return;
+                }
+
+                // Dynamically allow the layout container to grow downwards only while user is typing
+                document.documentElement.style.height = "auto";
+                document.body.style.height = "auto";
 
                 if (output.recommendations) {
                     const r = output.recommendations;
                     recTarget.innerHTML = `
-                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:15px; border-radius:6px; color:#fff; margin-bottom:10px; font-family:sans-serif;">
-                            <div style="color:#3B82F6; font-weight:bold; margin-bottom:8px;">🎯 SITG Alignment</div>
+                        <div class="sitg-rec-panel" style="background:#141B2D; border:1px solid #3B82F6; padding:12px; border-radius:4px; color:#fff; margin-bottom:8px; font-family:sans-serif; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+                            <div style="color:#3B82F6; font-weight:bold; margin-bottom:6px; font-size:13px;">🎯 SITG Alignment</div>
                             <div style="font-size:12px; opacity:0.9;"><strong>Service:</strong> ${r.service}</div>
                             <div style="font-size:12px; opacity:0.9;"><strong>Next Step:</strong> ${r.next_step}</div>
                         </div>
@@ -113,7 +124,7 @@
                 }
 
                 if (output.results.length === 0) {
-                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 15px; font-size:12px; border-radius:6px; font-family:sans-serif;">No documents found.</div>`;
+                    resultsTarget.innerHTML = `<div style="text-align: center; color: #9CA3AF; background:#141B2D; padding: 12px; font-size:12px; border-radius:4px; font-family:sans-serif; border: 1px solid #1E293B; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">No documents found.</div>`;
                     return;
                 }
 
@@ -121,14 +132,15 @@
                     const card = document.createElement("div");
                     card.style.background = "#141B2D";
                     card.style.border = "1px solid #1E293B";
-                    card.style.padding = "12px";
-                    card.style.borderRadius = "6px";
-                    card.style.marginBottom = "8px";
-                    card.style.family = "sans-serif";
+                    card.style.padding = "10px";
+                    card.style.borderRadius = "4px";
+                    card.style.marginBottom = "6px";
+                    card.style.fontFamily = "sans-serif";
+                    card.style.boxShadow = "0 10px 15px -3px rgba(0,0,0,0.3)";
                     
                     card.innerHTML = `
-                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:14px; display:block; margin-bottom:4px;">${doc.title}</a>
-                        <div style="color:#9CA3AF; font-size:12px; line-height:1.4;">${doc.desc}</div>
+                        <a href="${doc.url}" target="_top" style="color:#3B82F6; font-weight:600; text-decoration:none; font-size:13px; display:block; margin-bottom:2px;">${doc.title}</a>
+                        <div style="color:#9CA3AF; font-size:11px; line-height:1.4;">${doc.desc}</div>
                     `;
                     resultsTarget.appendChild(card);
                 });
