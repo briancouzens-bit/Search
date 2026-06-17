@@ -1,0 +1,37 @@
+class SITGSearchEngine {
+    constructor(indexUrl) {
+        this.indexUrl = indexUrl;
+        this.data = [];
+    }
+
+    async initialize() {
+        try {
+            const response = await fetch(this.indexUrl);
+            this.data = await response.json();
+        } catch (error) {
+            console.error("SITG Core Engine failed to read structural index data:", error);
+        }
+    }
+
+    search(query) {
+        const cleanQuery = query.toLowerCase().trim();
+        // If query field is completely empty, pass back zero states cleanly
+        if (!cleanQuery) return { recommendations: null, results: [] };
+
+        // Core fix: force everything to lowercase so "PQC", "pqc", and "Pqc" all match flawlessly
+        let matches = this.data.filter(item => {
+            return item.keywords.some(kw => cleanQuery.includes(kw.toLowerCase())) || 
+                   item.title.toLowerCase().includes(cleanQuery) ||
+                   item.desc.toLowerCase().includes(cleanQuery);
+        });
+
+        // Pull the top matched element that contains an active priority blueprint
+        const recommendedItem = matches.find(item => item.priority_alignment !== null);
+        const recommendations = recommendedItem ? recommendedItem.priority_alignment : null;
+
+        return {
+            recommendations: recommendations,
+            results: matches
+        };
+    }
+}
